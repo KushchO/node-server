@@ -1,27 +1,31 @@
-import { BaseController } from "../common/base.controller"
-import { NextFunction, Request, Response } from "express"
-import { HTTPError } from "../errors/http-error.class"
-import { inject, injectable } from "inversify"
-import { ILogger } from "../logger/logger.interface"
-import { TYPES } from "../types"
-import "reflect-metadata"
-import { IUserController } from "./users.controller.interface"
-
+import { BaseController } from '../common/base.controller'
+import { NextFunction, Request, Response } from 'express'
+import { HTTPError } from '../errors/http-error.class'
+import { inject, injectable } from 'inversify'
+import { ILogger } from '../logger/logger.interface'
+import { TYPES } from '../types'
+import 'reflect-metadata'
+import { IUserController } from './users.controller.interface'
+class User {}
+const users = []
 @injectable()
-export class UserController extends BaseController implements IUserController {
+class UserController extends BaseController implements IUserController {
   constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
     super(loggerService)
     this.bindRoutes([
-      { path: "/register", method: "post", func: this.register },
-      { path: "/login", method: "post", func: this.login },
+      { path: '/register', method: 'post', func: this.register },
+      { path: '/login', method: 'post', func: this.login },
     ])
   }
 
-  login(req: Request, res: Response, next: NextFunction) {
-    next(new HTTPError(401, "пользователь не зарегистрирован", "login"))
+  login(req: Request, res: Response, next: NextFunction): void {
+    users.push(new User())
+    next(new HTTPError(401, 'пользователь не зарегистрирован', 'login'))
     //this.ok(res, 'login')
   }
-  register(req: Request, res: Response) {
-    this.ok(res, "register")
+  register(req: Request, res: Response): void {
+    this.ok(res, 'register')
   }
 }
+
+export { UserController }

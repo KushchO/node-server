@@ -5,6 +5,6 @@ export class HTTPError extends Error {
     super(message)
     this.statusCode = statusCode
     this.message = message
-    this.context = context
+    this.context = context ?? ''
   }
 }
